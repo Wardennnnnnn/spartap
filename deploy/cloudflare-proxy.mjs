@@ -12,13 +12,19 @@ export default {
     url.hostname = RENDER_HOST;
     const upstream = new Request(url.toString(), request);
     upstream.headers.delete('host');
-    upstream.headers.set('x-forwarded-host', PUBLIC_HOST);
+    // Avoid negotiating compression across two independent WebSocket hops.
+    upstream.headers.delete('sec-websocket-extensions');
     upstream.headers.set('x-forwarded-proto', 'https');
     const clientIp = request.headers.get('cf-connecting-ip');
     if (clientIp) upstream.headers.set('x-forwarded-for', clientIp);
     else upstream.headers.delete('x-forwarded-for');
-    // Return the upstream response directly to preserve cookies, streaming,
-    // and WebSocket upgrades. Do not cache authenticated API responses.
-    return fetch(upstream, {redirect: 'manual', cf: {cacheTtl: 0}});
+    // Validate browser origin before translating it for the Render origin.
+    const origin = request.headers.get('origin');
+    if (origin && origin !== `https://${PUBLIC_HOST}`) {
+      return new Response('Invalid request origin.', {status: 403});
+    }
+    if (origin) upstream.headers.set('origin', `https://${RENDER_HOST}`);
+    upstream.headers.set('x-forwarded-host', RENDER_HOST);
+    return fetch(upstream);
   }
 };
