@@ -1,12 +1,18 @@
 services:
   - type: web
-    name: safetap
+    name: spartap
+    repo: https://github.com/Wardennnnnnn/spartap
+    branch: main
+    domains:
+      - spartap.terincorp.com
     runtime: node
     plan: free
     region: singapore
-    autoDeployTrigger: off
+    autoDeployTrigger: 'off'
     buildCommand: npm ci && npm run vendor
-    startCommand: npm start
+    startCommand: >-
+      node -e 'const fs = require("node:fs"); fs.mkdirSync(".runtime/cloud", {recursive: true}); fs.writeFileSync(".runtime/cloud/tidb-ca.pem", require("node:tls").rootCertificates.join("\n"), {mode: 0o600});'
+      && npm start
     healthCheckPath: /health
     envVars:
       - key: NODE_VERSION
@@ -22,7 +28,7 @@ services:
       - key: DB_SSL
         value: '1'
       - key: DB_SSL_CA_FILE
-        value: /etc/secrets/aiven-ca.pem
+        value: .runtime/cloud/tidb-ca.pem
       - key: DB_HOST
         sync: false
       - key: DB_PORT
