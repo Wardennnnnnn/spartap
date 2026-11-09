@@ -3,8 +3,7 @@ services:
     name: spartap
     repo: https://github.com/Wardennnnnnn/spartap
     branch: main
-    domains:
-      - spartap.terincorp.com
+    domains: []
     runtime: node
     plan: free
     region: singapore
