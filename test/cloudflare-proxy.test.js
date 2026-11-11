@@ -36,3 +36,50 @@ test('Cloudflare proxy enforces public origin and preserves bodies, cookies and 
   })), response);
   assert.equal(forwarded.headers.get('sec-websocket-extensions'), null);
 });
+
+test('app shell recovers from gateway failures but never replays writes or upgrades', async t => {
+  const proxy = (await import('../deploy/cloudflare-proxy.mjs')).default;
+  const originalFetch = globalThis.fetch;
+  const originalTimeout = globalThis.setTimeout;
+  t.after(() => { globalThis.fetch = originalFetch; globalThis.setTimeout = originalTimeout; });
+  globalThis.setTimeout = (callback, delay) => delay === 5000
+    ? originalTimeout(callback, 0) : originalTimeout(callback, delay);
+  let calls = 0;
+  let discarded;
+  globalThis.fetch = async () => {
+    calls++;
+    if (calls === 1) {
+      discarded = new Response('gateway', {status: 502});
+      return discarded;
+    }
+    return new Response('SparTap', {headers: {'set-cookie': 'session=preserved'}});
+  };
+  const recovered = await proxy.fetch(new Request('https://spartap.terincorp.com/'));
+  assert.equal(calls, 2);
+  assert.equal(discarded.bodyUsed, true);
+  assert.equal(await recovered.text(), 'SparTap');
+  assert.equal(recovered.headers.get('set-cookie'), 'session=preserved');
+
+  for (const request of [
+    new Request('https://spartap.terincorp.com/api/login', {method: 'POST', body: '{}'}),
+    new Request('https://spartap.terincorp.com/api/state'),
+    new Request('https://spartap.terincorp.com/', {headers: {upgrade: 'websocket'}})
+  ]) {
+    calls = 0;
+    globalThis.fetch = async () => { calls++; return new Response('gateway', {status: 502}); };
+    assert.equal((await proxy.fetch(request)).status, 502);
+    assert.equal(calls, 1);
+  }
+
+  calls = 0;
+  globalThis.fetch = async () => { calls++; throw new Error('connection failed'); };
+  const unavailable = await proxy.fetch(new Request('https://spartap.terincorp.com/'));
+  assert.equal(calls, 12);
+  assert.equal(unavailable.status, 503);
+  assert.equal(unavailable.headers.get('cache-control'), 'no-store');
+
+  calls = 0;
+  globalThis.fetch = async () => { calls++; return new Response('forbidden', {status: 403}); };
+  assert.equal((await proxy.fetch(new Request('https://spartap.terincorp.com/'))).status, 403);
+  assert.equal(calls, 1);
+});
