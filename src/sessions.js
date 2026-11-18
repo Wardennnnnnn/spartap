@@ -17,6 +17,9 @@ class MemorySessionStore {
   async get(token) { return valid(token) ? structuredClone(this.rows.get(hash(token))) : undefined; }
   async set(token, session) { this.rows.set(hash(token), structuredClone(session)); }
   async delete(token) { if (valid(token)) this.rows.delete(hash(token)); }
+  async deleteUser(userId) {
+    for (const [key, session] of this.rows) if (session.userId === userId) this.rows.delete(key);
+  }
   async purgeExpired(now = Date.now()) {
     for (const [key, session] of this.rows) if (session.expires <= now) this.rows.delete(key);
   }
@@ -36,6 +39,7 @@ class MysqlSessionStore {
   async delete(token) {
     if (valid(token)) await this.pool.execute('DELETE FROM app_sessions WHERE tokenHash = ?', [hash(token)]);
   }
+  async deleteUser(userId) { await this.pool.execute('DELETE FROM app_sessions WHERE userId = ?', [userId]); }
   async purgeExpired(now = Date.now()) { await this.pool.execute('DELETE FROM app_sessions WHERE expires <= ?', [now]); }
 }
 

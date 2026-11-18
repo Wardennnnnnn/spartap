@@ -38,7 +38,31 @@ function createAuthentication(store) {
       : req.headers.host;
     return req.headers.origin === `${protocol}://${host}`;
   };
+  async function issueSession(req, res, user, redirect = false) {
+    await sessions.delete(cookie(req));
+    const token = randomBytes(32).toString('hex'),
+      session = {
+        userId: user.id,
+        csrf: randomBytes(24).toString('hex'),
+        expires: Date.now() + 12 * 3600000
+      };
+    await sessions.set(token, session);
+    res.set('Cache-Control', 'no-store');
+    res.cookie('safetap_session', token, {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure,
+      maxAge: 12 * 3600000,
+      path: '/'
+    });
+    if (redirect) return res.redirect('/');
+    res.json({
+      user: domain.publicUser(user),
+      csrf: session.csrf
+    });
+  }
   function mountRoutes(app, io) {
+    require('./school-auth').mountSchoolAuth({app, store, authenticate, originOK, issueSession});
     // Guest discovery is a normal response. Protected APIs still return 401.
     app.get('/api/session', async (req, res, next) => {
       res.set('Cache-Control', 'no-store');
@@ -77,25 +101,7 @@ function createAuthentication(store) {
           throw new domain.Fault('Incorrect username or password.', 401);
         }
         attempts.delete(key);
-        await sessions.delete(cookie(req));
-        const token = randomBytes(32).toString('hex'),
-          session = {
-            userId: user.id,
-            csrf: randomBytes(24).toString('hex'),
-            expires: Date.now() + 12 * 3600000
-          };
-        await sessions.set(token, session);
-        res.set('Cache-Control', 'no-store');
-        res.cookie('safetap_session', token, {
-          httpOnly: true,
-          sameSite: 'strict',
-          secure,
-          maxAge: 12 * 3600000,
-          path: '/'
-        }).json({
-          user: domain.publicUser(user),
-          csrf: session.csrf
-        });
+        await issueSession(req, res, user);
       } catch (e) {
         next(e);
       }

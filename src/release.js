@@ -4,6 +4,6 @@
 // SAFETAP_COMMIT during deployment; no credentials or DB settings are exposed.
 module.exports = {
   version: '1.1.0',
-  build: 'v35-emergency-scanner',
+  build: 'v36-school-sign-in',
   commit: process.env.RENDER_GIT_COMMIT || process.env.SAFETAP_COMMIT || null
 };

@@ -81,3 +81,36 @@ databases; they must not replace or clear the live database.
 
 A new Cloudflare hostname has separate browser storage. Upload any pending phone
 records on the old hostname before moving devices to the new one.
+
+## School email sign-in and password recovery
+
+Admin signs in with the existing username/password and opens **School email accounts**
+(`/school-accounts.html`) to link one school email to each existing staff/rep account.
+Only explicitly linked, active accounts can use either school sign-in method.
+Removing an email blocks future email/Google sign-ins; disable the account to revoke
+all access, including its registered emergency scanner.
+
+Email OTP and Forgot password use Resend. Set `RESEND_API_KEY` and `EMAIL_FROM`
+(a sender on a domain verified in Resend) in Render Environment. Codes expire after
+10 minutes, allow five guesses, and are single use. A resend replaces the previous
+code for the same purpose. Sends have a 60-second cooldown and a five-per-email,
+30-per-IP daily limit (UTC). Login and reset challenges are separate. Successful
+password recovery revokes normal login sessions; scanner registration is separate.
+
+For Google, create an OAuth **Web application** client in Google Cloud and configure
+its consent screen for the school organization (or approved test users while testing).
+Add this exact authorized redirect URI:
+`https://spartap.terincorp.com/api/auth/google/callback`.
+Set `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and
+`PUBLIC_APP_URL=https://spartap.terincorp.com` in Render Environment, then redeploy.
+`SCHOOL_EMAIL_DOMAIN` defaults to `g.batstate-u.edu.ph`.
+Google and OTP are alternative sign-in options; Google does not require an extra OTP.
+Google tokens are verified server-side, including audience, issuer (via Google's
+library), nonce, verified email and hosted domain. Authorization uses explicit email
+mapping and pins the Google subject after the first successful sign-in.
+
+Both methods remain unavailable until configured. Username/password continues to
+work. Never put secrets in source control. Auth mappings, hashed pending codes,
+rate limits and short-lived OAuth state persist in the additive MySQL
+`school_auth_state` table. Demo mode keeps these in memory only. Google/Resend
+live credentials and a physical phone are required for end-to-end delivery testing.

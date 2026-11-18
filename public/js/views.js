@@ -21,7 +21,7 @@ globalThis.SafeTapViews = {create({state, helpers, currentEvent, offlineReadines
       <h2 id="login-title">Sign in
       </h2>
 ${state.config.demo ? '<details class="demo-accounts"><summary>Demo accounts</summary><p>Admin: <b>admin</b> · Reps: <b>repit</b>, <b>repcs</b><br>Password: <b>SafeTapDemo123!</b></p></details>' : ''}
-      <form data-form="login">${field('username', 'Username', 'text', '', 'autocomplete="username" autocapitalize="none" spellcheck="false" required maxlength="50"')}${field('password', 'Password', 'password', '', 'autocomplete="current-password" required maxlength="128"')}
+      <a href="/school-login.html?reset=1">Forgot password?</a><a class="btn" href="/school-login.html">School email · Google or OTP</a><form data-form="login">${field('username', 'Username', 'text', '', 'autocomplete="username" autocapitalize="none" spellcheck="false" required maxlength="50"')}${field('password', 'Password', 'password', '', 'autocomplete="current-password" required maxlength="128"')}
       <div class="error-text" data-error role="alert">
       </div><button class="btn primary" type="submit">Sign in</button>
       </form>
@@ -44,7 +44,7 @@ ${state.config.demo ? '<details class="demo-accounts"><summary>Demo accounts</su
       </div>
       <nav class="nav" aria-label="Main navigation">${nav.map(([id, symbol, name]) => `<button data-action="navigate" data-page="${id}" class="${state.page === id ? 'active' : ''}" ${state.page === id ? 'aria-current="page"' : ''}>${icon(symbol)}<span>${name}</span></button>`).join('')}
       </nav>
-      <div class="sidebar-bottom"><a class="btn" href="/scanner.html">Emergency scanner · register phone</a>
+      <div class="sidebar-bottom">${state.user.role === 'admin' ? '<a class="btn" href="/school-accounts.html">School email accounts</a>' : ''}<a class="btn" href="/scanner.html">Emergency scanner · register phone</a>
       <button type="button" class="scope-card building-picker" data-action="choose-building" aria-haspopup="dialog">${icon('building')}
       <span><strong>${esc(BUILDINGS.find(building => building.id === state.building)?.name || 'CICS Building')}</strong><small>Choose building</small></span>${icon('chevron')}
       </button>

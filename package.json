@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "express": "5.2.1",
+    "google-auth-library": "^11.3.4",
     "html5-qrcode": "2.3.8",
     "mysql2": "3.24.6",
     "qrcode": "1.5.4",
