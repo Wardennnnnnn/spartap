@@ -56,6 +56,7 @@ function createApplication(store, {
   app.get('/api/version', (req, res) => {
     res.set('Cache-Control', 'no-store').json(require('./release'));
   });
+  require('./scanner-access')({app, store, auth, io});
   auth.mountRoutes(app, io);
   app.use('/api', async (req, res, next) => {
     if (!['GET', 'HEAD'].includes(req.method)) return next();

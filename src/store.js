@@ -3,7 +3,7 @@
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const syncFs = require('node:fs');
-const {MemorySessionStore, MysqlSessionStore, sessionMigration} = require('./sessions');
+const {MemorySessionStore, MysqlSessionStore, sessionMigration, deviceMigration} = require('./sessions');
 const {
   schema,
   migrations
@@ -164,7 +164,7 @@ async function mysqlPool() {
   return mysql.createPool(poolConfig());
 }
 async function migrate(pool) {
-  for (const sql of [...migrations, sessionMigration]) await pool.query(sql);
+  for (const sql of [...migrations, sessionMigration, deviceMigration]) await pool.query(sql);
 }
 async function initialize() {
   const pool = await mysqlPool();
@@ -204,6 +204,7 @@ async function createStore({
   const pool = await mysqlPool();
   try {
     await pool.query('SELECT id FROM app_lock LIMIT 1');
+    await pool.query(deviceMigration);
     try {
       await pool.query('SELECT tokenHash FROM app_sessions LIMIT 0');
     } catch (error) {

@@ -1,7 +1,7 @@
 'use strict';
 
-const VERSION = 'safetap-shell-v34-building-picker';
-const BUILD = '34-building-picker';
+const VERSION = 'safetap-shell-v35-emergency-scanner';
+const BUILD = '35-emergency-scanner';
 const SCRIPTS = [
   '/theme.js', '/app.js', '/js/device-store.js', '/js/assets.js',
   '/js/student-directory.js', '/js/scanners.js', '/js/offline-controller.js', '/js/views.js'

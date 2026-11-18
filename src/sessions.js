@@ -39,4 +39,8 @@ class MysqlSessionStore {
   async purgeExpired(now = Date.now()) { await this.pool.execute('DELETE FROM app_sessions WHERE expires <= ?', [now]); }
 }
 
-module.exports = {MemorySessionStore, MysqlSessionStore, sessionMigration};
+const deviceMigration = `CREATE TABLE IF NOT EXISTS scanner_devices (
+ userId VARCHAR(191) PRIMARY KEY, tokenHash CHAR(64) NOT NULL, csrf CHAR(48) NOT NULL,
+ FOREIGN KEY (userId) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin`;
+module.exports = {MemorySessionStore, MysqlSessionStore, sessionMigration, deviceMigration};
