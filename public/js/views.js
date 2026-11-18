@@ -21,10 +21,11 @@ globalThis.SafeTapViews = {create({state, helpers, currentEvent, offlineReadines
       <h2 id="login-title">Sign in
       </h2>
 ${state.config.demo ? '<details class="demo-accounts"><summary>Demo accounts</summary><p>Admin: <b>admin</b> · Reps: <b>repit</b>, <b>repcs</b><br>Password: <b>SafeTapDemo123!</b></p></details>' : ''}
-      <a href="/school-login.html?reset=1">Forgot password?</a><a class="btn" href="/school-login.html">School email · Google or OTP</a><form data-form="login">${field('username', 'Username', 'text', '', 'autocomplete="username" autocapitalize="none" spellcheck="false" required maxlength="50"')}${field('password', 'Password', 'password', '', 'autocomplete="current-password" required maxlength="128"')}
+      <form data-form="login">${field('username', 'Username', 'text', '', 'autocomplete="username" autocapitalize="none" spellcheck="false" required maxlength="50"')}${field('password', 'Password', 'password', '', 'autocomplete="current-password" required maxlength="128"')}
       <div class="error-text" data-error role="alert">
       </div><button class="btn primary" type="submit">Sign in</button>
       </form>
+      <div class="login-auth-links"><a href="/school-login.html?reset=1">Forgot password?</a><a class="btn" href="/school-login.html">Sign in with school email</a></div>
       </div>
       </section>
       </main>`;

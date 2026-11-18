@@ -1,7 +1,7 @@
 'use strict';
 
-const VERSION = 'safetap-shell-v36-school-sign-in';
-const BUILD = '36-school-sign-in';
+const VERSION = 'safetap-shell-v37-school-login-ui';
+const BUILD = '37-school-login-ui';
 const SCRIPTS = [
   '/theme.js', '/app.js', '/js/device-store.js', '/js/assets.js',
   '/js/student-directory.js', '/js/scanners.js', '/js/offline-controller.js', '/js/views.js'

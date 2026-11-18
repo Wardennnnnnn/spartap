@@ -793,3 +793,17 @@ button:disabled { opacity: 1; background: var(--surface-soft); color: var(--mute
 .building-option:hover { background: var(--surface-soft); }
 .building-option[aria-pressed=true] { border-color: var(--brand); background: var(--surface-soft); }
 .building-option > .icon { color: var(--brand); }
+
+/* School sign-in shares the main login layout, controls and theme tokens. */
+.auth-alternative { width: 100%; min-height: 48px; }
+.auth-divider { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: .75rem; margin: 22px 0; }
+.auth-divider::before, .auth-divider::after { content: ''; height: 1px; background: var(--line); flex: 1; }
+.school-login-box .auth-status { font-size: .8125rem; line-height: 1.6; margin: 18px 0; overflow-wrap: anywhere; }
+.school-login-box .auth-status[data-error=true] { color: var(--accent); }
+.auth-recipient { font-size: .8125rem; color: var(--muted); overflow-wrap: anywhere; margin: 0 0 20px; }
+.auth-help { font-size: .75rem; color: var(--muted); margin: -12px 0 20px; }
+.auth-code-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.auth-code-actions .btn { flex: 1; }
+.auth-reset-link { font-size: .8125rem; }
+.login-auth-links { display: grid; gap: 16px; margin-top: 20px; font-size: .8125rem; }
+.login-auth-links .btn { width: 100%; }
