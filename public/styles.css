@@ -813,3 +813,19 @@ button:disabled { opacity: 1; background: var(--surface-soft); color: var(--mute
 #registrations-root .card-body > p { margin-bottom: 20px; }
 #registrations-root td { overflow-wrap: anywhere; }
 @media(max-width:600px) { .registration-totals { grid-template-columns: 1fr; } }
+
+/* Keep account controls anchored while long navigation scrolls independently. */
+.sidebar { gap: 20px; padding-block: 24px 16px; overflow: hidden; }
+.sidebar-brand { flex-shrink: 0; padding-bottom: 20px; }
+.sidebar .nav { flex: 1 1 auto; min-height: 0; overflow-y: auto; align-content: start; overscroll-behavior: contain; scrollbar-width: thin; }
+.sidebar .nav button { min-height: 44px; padding-block: 10px; }
+.sidebar-bottom { flex: 0 0 auto; margin-top: 0; padding-top: 12px; border-top: 1px solid var(--nav-border); }
+.sidebar-shortcut { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 10px 14px; border-radius: var(--radius-control); color: var(--nav-text); font-size: .8125rem; font-weight: 600; text-decoration: none; }
+.sidebar-shortcut:hover { background: var(--nav-hover); }
+.sidebar-shortcut > .icon:last-child { width: 16px; height: 16px; margin-left: auto; color: var(--nav-muted); }
+.sidebar .scope-card { padding-block: 12px; }
+.sidebar .user-card { padding-top: 12px; }
+@media (max-height: 760px) and (min-width: 761px) {
+  .sidebar { gap: 12px; padding-top: 16px; }
+  .sidebar-brand { padding-bottom: 14px; }
+}
