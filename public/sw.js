@@ -1,7 +1,7 @@
 'use strict';
 
-const VERSION = 'safetap-shell-v39-registrations';
-const BUILD = '39-registrations';
+const VERSION = 'safetap-shell-v40-hide-presentation-reset';
+const BUILD = '40-hide-presentation-reset';
 const SCRIPTS = [
   '/theme.js', '/app.js', '/js/device-store.js', '/js/assets.js',
   '/js/registrations.js', '/js/student-directory.js', '/js/scanners.js', '/js/offline-controller.js', '/js/views.js'
