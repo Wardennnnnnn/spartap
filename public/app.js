@@ -391,7 +391,7 @@ async function action(el) {
   if (a === 'theme') { window.SafeTapTheme?.toggle(); updateThemeButtons(); return; }
   if (a === 'close-modal') return $('#modal').close();
   if (a === 'more') {
-    return modal('More options', '', `<nav class="more-nav" aria-label="More pages">${visibleNav().filter(([page]) => !['dashboard', 'attendance', 'scanner'].includes(page)).map(([page, symbol, label]) => btn(icon(symbol) + label, 'navigate', '', `data-page="${page}"`)).join('')}</nav><div class="more-account"><strong>${esc(state.user.name)}</strong><small>${state.user.role === 'admin' ? 'Administrator' : 'Class representative'}</small>${btn(icon('logout') + 'Sign out', 'logout', '')}</div>`);
+    return modal('More options', '', `<nav class="more-nav" aria-label="More pages">${visibleNav().filter(([page]) => !['dashboard', 'attendance', 'scanner'].includes(page)).map(([page, symbol, label]) => btn(icon(symbol) + label, 'navigate', '', `data-page="${page}"`)).join('')}<a class="btn" href="/scanner.html">${icon('scan')}Emergency scanner · register phone</a>${state.user.role === 'admin' ? '<a class="btn" href="/school-accounts.html">School email accounts</a>' : ''}</nav><div class="more-account"><strong>${esc(state.user.name)}</strong><small>${state.user.role === 'admin' ? 'Administrator' : 'Class representative'}</small>${btn(icon('logout') + 'Sign out', 'logout', '')}</div>`);
   }
   if (a === 'navigate') {
     await stopReaders();

@@ -4,6 +4,6 @@
 // SAFETAP_COMMIT during deployment; no credentials or DB settings are exposed.
 module.exports = {
   version: '1.1.0',
-  build: 'v37-school-login-ui',
+  build: 'v38-mobile-school-links',
   commit: process.env.RENDER_GIT_COMMIT || process.env.SAFETAP_COMMIT || null
 };

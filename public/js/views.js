@@ -310,7 +310,7 @@ ${state.config.demo ? '<details class="demo-accounts"><summary>Demo accounts</su
       </tr>`).join('');
   }
   function team() {
-    return heading('', 'Representatives', '', btn('+ Add representative', 'add-rep', 'primary')) + `
+    return heading('', 'Representatives', '', '<a class="btn" href="/school-accounts.html">School email accounts</a>' + btn('+ Add representative', 'add-rep', 'primary')) + `
       <section class="card">
       <div class="table-wrap">
       <table>
