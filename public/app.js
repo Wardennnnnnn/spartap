@@ -30,7 +30,7 @@ const state = {
   csrf: null,
   data: null,
   config: {},
-  page: 'dashboard',
+  page: globalThis.location?.hash === '#registrations' ? 'registrations' : 'dashboard',
   building: 'cics',
   floor: 3,
   room: null,
@@ -92,9 +92,10 @@ const APP_NAV = [
   ['offline', 'offline', 'Offline records'],
   ['students', 'students', 'Students & blocks'],
   ['team', 'team', 'Representatives'],
+  ['registrations', 'team', 'Registrations'],
   ['history', 'history', 'Reports']
 ];
-const visibleNav = () => APP_NAV.filter(([page]) => state.user?.role === 'admin' || !['students', 'team'].includes(page));
+const visibleNav = () => APP_NAV.filter(([page]) => state.user?.role === 'admin' || !['students', 'team', 'registrations'].includes(page));
 function friendlyError(message) {
   const known = {
     'Student/credential is not registered or is inactive.': 'This ID is not linked to an active student. Ask an administrator to check the student record.',

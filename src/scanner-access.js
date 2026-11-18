@@ -27,6 +27,20 @@ module.exports = function mountScanner({app, store, auth, io}) {
     res.set('Cache-Control', 'no-store');
     try { await fn(req, res); } catch (error) { next(error); }
   });
+  async function listDevices() {
+    if (store.pool) { const [rows] = await store.pool.query('SELECT userId FROM scanner_devices'); return rows; }
+    return [...memory.keys()].map(userId => ({userId}));
+  }
+  app.locals.scannerAccess = {list: listDevices, clear: () => memory.clear()};
+  route('get', '/api/scanner/devices', async (req, res) => {
+    const {user} = await auth.authenticate(req); domain.admin(user);
+    const db = await store.read(['users']);
+    const devices = (await listDevices()).map(row => {
+      const owner = db.users.find(u => u.id === row.userId);
+      return {userId: row.userId, name: owner?.name || 'Unknown account', username: owner?.username, active: Boolean(owner?.active)};
+    });
+    res.json({devices});
+  });
   route('post', '/api/scanner/register', async (req, res) => {
     const {user, session} = await auth.authenticate(req);
     domain.need(auth.originOK(req) && req.headers['x-csrf-token'] === session.csrf, 'Session verification failed.', 403);

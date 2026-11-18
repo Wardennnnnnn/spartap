@@ -114,3 +114,21 @@ work. Never put secrets in source control. Auth mappings, hashed pending codes,
 rate limits and short-lived OAuth state persist in the additive MySQL
 `school_auth_state` table. Demo mode keeps these in memory only. Google/Resend
 live credentials and a physical phone are required for end-to-end delivery testing.
+
+## Registrations and presentation reset
+
+Administrators can open **Registrations** from the desktop sidebar or mobile More
+menu. `/#registrations` and the older `/school-accounts.html` link open the same
+page in the main application shell. It lists all account/email mappings, registered
+scanner accounts, and searchable students. Device credentials are never returned.
+
+The presentation reset clears classes, attendance, evacuation events, participants,
+check-ins, submissions, audit history, linked school emails, pending OTP/OAuth state,
+and registered scanner devices. Accounts, students, blocks, rooms, and normal login
+sessions remain. SQL reset saves a snapshot into `presentation_backups` and deletes
+records in the same transaction, under the application write lock. A failed backup
+or deletion rolls back the reset. Demo mode keeps the snapshot in memory only.
+The endpoint requires an administrator session, CSRF verification, and the exact
+confirmation `RESET PRESENTATION`. Treat backups as private data and retain the
+returned backup reference. Old offline queues refer to removed events and should
+be cleared on presentation devices before recording new scans.

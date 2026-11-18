@@ -1,5 +1,6 @@
 'use strict';
 const $ = id => document.getElementById(id);
+if ($('theme')) $('theme').onclick = () => window.SafeTapTheme?.toggle();
 let access, reader, busy = false, last = '', lastAt = 0;
 async function api(path, body, csrf) {
   const response = await fetch(path, {cache: 'no-store', ...(body ? {method: 'POST', headers: {'Content-Type': 'application/json', 'X-CSRF-Token': csrf}, body: JSON.stringify(body)} : {})});

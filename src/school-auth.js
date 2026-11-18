@@ -30,6 +30,7 @@ function createRepository(store) {
 }
 function mountSchoolAuth({app, store, authenticate, originOK, issueSession, config = process.env, sendEmail, verifyGoogle}) {
  const repo = createRepository(store);
+ app.locals.schoolAuthRepository = repo;
  const domain = config.SCHOOL_EMAIL_DOMAIN || 'g.batstate-u.edu.ph';
  const otpEnabled = Boolean(config.RESEND_API_KEY && config.EMAIL_FROM);
  const senderAddress = config.EMAIL_FROM?.match(/<([^<>]+)>/)?.[1] || config.EMAIL_FROM;

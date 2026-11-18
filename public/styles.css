@@ -807,3 +807,9 @@ button:disabled { opacity: 1; background: var(--surface-soft); color: var(--mute
 .auth-reset-link { font-size: .8125rem; }
 .login-auth-links { display: grid; gap: 16px; margin-top: 20px; font-size: .8125rem; }
 .login-auth-links .btn { width: 100%; }
+.registration-totals { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 20px; }
+.registration-search { margin: 0; flex: 1; }
+#registrations-root > .card { margin-bottom: 24px; }
+#registrations-root .card-body > p { margin-bottom: 20px; }
+#registrations-root td { overflow-wrap: anywhere; }
+@media(max-width:600px) { .registration-totals { grid-template-columns: 1fr; } }

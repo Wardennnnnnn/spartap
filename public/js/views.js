@@ -32,6 +32,7 @@ ${state.config.demo ? '<details class="demo-accounts"><summary>Demo accounts</su
   }
   function render() {
     if (!state.user || !state.data) return login();
+    if (state.page === 'registrations' && state.user.role !== 'admin') state.page = 'dashboard';
     const nav = visibleNav();
     const current = APP_NAV.find(([page]) => page === state.page);
     $('#app').innerHTML = `<a class="skip-link" href="#page">Skip to page content</a>
@@ -67,7 +68,7 @@ ${state.config.demo ? '<details class="demo-accounts"><summary>Demo accounts</su
       <div class="content">
       <div id="connection-note">${connectionNotice()}</div>
       <div id="page" data-page="${esc(state.page)}" tabindex="-1">${{
-      dashboard, attendance, scanner, students, team, history, offline
+      dashboard, attendance, scanner, students, team, history, offline, registrations: () => globalThis.SafeTapRegistrations?.view() || ''
     }[state.page]()}
       </div>
       <footer class="footer-note"><details class="photo-credit"><summary>Photo credit</summary><p>Campus photo: <a href="https://commons.wikimedia.org/wiki/File:College_of_Engineering,_Architecture,_Fine_Arts_and_Computing_Sciences_Building.JPG">Kampfgruppe</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> · resized and tinted</p></details>
@@ -77,6 +78,7 @@ ${state.config.demo ? '<details class="demo-accounts"><summary>Demo accounts</su
       <nav class="mobile-nav" aria-label="Phone navigation">${APP_NAV.slice(0, 3).map(([id, symbol, name]) => `<button data-action="navigate" data-page="${id}" ${state.page === id ? 'aria-current="page"' : ''}>${icon(symbol)}<span>${name}</span></button>`).join('')}<button data-action="more" ${!['dashboard', 'attendance', 'scanner'].includes(state.page) ? 'aria-current="page"' : ''}>${icon('more')}<span>More</span></button>
       </nav>
       </div>`;
+    if (state.page === 'registrations') globalThis.SafeTapRegistrations?.mount(state);
   }
   function eventStrip() {
     const active = state.data.active;
