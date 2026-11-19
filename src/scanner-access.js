@@ -59,7 +59,7 @@ module.exports = function mountScanner({app, store, auth, io}) {
   route('get', '/api/scanner', async (req, res) => {
     const {user, csrf} = await device(req);
     const db = await store.read(['events']);
-    res.json({name: user.name, csrf, event: db.events.find(e => e.status === 'active') || null});
+    res.json({userId: user.id, name: user.name, csrf, event: db.events.find(e => e.status === 'active') || null});
   });
   route('post', '/api/scanner/checkin', async (req, res) => {
     const {user, csrf} = await device(req);

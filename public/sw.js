@@ -1,7 +1,7 @@
 'use strict';
 
-const VERSION = 'safetap-shell-v41-sidebar-layout';
-const BUILD = '41-sidebar-layout';
+const VERSION = 'safetap-shell-v42-scanner-flow';
+const BUILD = '42-scanner-flow';
 const SCRIPTS = [
   '/theme.js', '/app.js', '/js/device-store.js', '/js/assets.js',
   '/js/registrations.js', '/js/student-directory.js', '/js/scanners.js', '/js/offline-controller.js', '/js/views.js'
